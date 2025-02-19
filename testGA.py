@@ -38,10 +38,10 @@ if __name__ == '__main__':
     title = instance[3] if len(instance) > 3 else "N/A"
 
     # 使用 f-string 提高可读性和性能
-    print(f"{title}GA算法，最小化最大完工时间，makespan:{makespan}，耗时:{time.time() - start_time}")
+    print(f"{title}，GA算法，最小化最大完工时间，makespan:{makespan}，耗时:{time.time() - start_time}")
 
     # print(jobShopEnv)
     # print(jobShopEnv.jobs)
     # print(jobShopEnv.machines)
 
-    gantt_chart.plot(jobShopEnv);
+    gantt_chart.plot(jobShopEnv).show();
