@@ -4,7 +4,7 @@ problem_instance = "/fjsp/brandimarte/Mk01.fjs"
 
 [algorithm]
 population_size = 10    # number of individuals in the population
-ngen = 10               # number of generations
+ngen = 50               # number of generations
 seed = 5                # random seed
 indpb = 0.1             # probability of mutating each gene
 cr = 0.7                # probability of mating
