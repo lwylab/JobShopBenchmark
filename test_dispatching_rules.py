@@ -33,6 +33,6 @@ if __name__ == '__main__':
     title = instance[3] if len(instance) > 3 else "N/A"
 
     print(
-        f"{title}——调度规则dispatching_rules——最小化最大完工时间——makespan:{makespan}——耗时:{time.time() - start_time}")
+        f"{title}，调度规则，最小化最大完工时间，makespan:{makespan}，耗时:{time.time() - start_time}")
 
     gantt_chart.plot(jobShopEnv).show();
