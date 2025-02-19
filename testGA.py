@@ -1,10 +1,10 @@
 import re
 import time
 
-from plotting.drawer import plot_gantt_chart
 from solution_methods.GA.run_GA import run_GA
 from solution_methods.GA.src.initialization import initialize_run
 from solution_methods.helper_functions import load_job_shop_env, load_parameters
+from visualization import gantt_chart
 
 if __name__ == '__main__':
     # freeze_support() # 关闭之后，貌似也能正常工作。
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     # print(jobShopEnv.jobs)
     # print(jobShopEnv.machines)
 
-    plot_gantt_chart(jobShopEnv)
+    gantt_chart.plot(jobShopEnv);
