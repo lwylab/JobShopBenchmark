@@ -32,7 +32,6 @@ if __name__ == '__main__':
     # 检查是否有足够的部分，并处理边界条件
     title = instance[3] if len(instance) > 3 else "N/A"
 
-    print(
-        f"{title}，调度规则，最小化最大完工时间，makespan:{makespan}，耗时:{time.time() - start_time}")
+    print(f"{title}，调度规则，最小化最大完工时间，makespan:{makespan}，耗时:{time.time() - start_time}")
 
     gantt_chart.plot(jobShopEnv).show();
