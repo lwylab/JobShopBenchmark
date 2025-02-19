@@ -7,7 +7,7 @@ population_size = 50    # number of individuals in the population
 ngen = 50               # number of generations
 seed = 5                # random seed
 indpb = 0.1             # probability of mutating each gene
-cr = 0.7                # probability of mating
+cr = 0.9                # probability of mating
 multiprocessing = true  # use multiprocessing for parallel evaluation of individuals (default uses all threads)
 
 [output]
