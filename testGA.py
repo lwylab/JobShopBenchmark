@@ -46,11 +46,15 @@ if __name__ == '__main__':
     # print(jobShopEnv.machines)
 
     gantt_chart.plot(jobShopEnv).show()
-    o = jobShopEnv.operations
+
+    # o = jobShopEnv.operations
+
     result = []
-    for i in range(len(o)):
-        result.append(o[i].scheduling_information)
-    print(result)
+    for op in jobShopEnv.operations:
+        row = op.scheduling_information  # 这是一个dict
+        row.update({'job_id': op.job_id, 'operation_id': op.operation_id})
+        result.append(row)
+
 
     # 将 result 转换为 JSON 字符串
     result_json = json.dumps(result, ensure_ascii=False, indent=4)
