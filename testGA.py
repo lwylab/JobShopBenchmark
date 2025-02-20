@@ -1,3 +1,4 @@
+import json
 import re
 import time
 
@@ -44,4 +45,13 @@ if __name__ == '__main__':
     # print(jobShopEnv.jobs)
     # print(jobShopEnv.machines)
 
-    gantt_chart.plot(jobShopEnv).show();
+    gantt_chart.plot(jobShopEnv).show()
+    o = jobShopEnv.operations
+    result = []
+    for i in range(len(o)):
+        result.append(o[i].scheduling_information)
+    print(result)
+
+    # 将 result 转换为 JSON 字符串
+    result_json = json.dumps(result, ensure_ascii=False, indent=4)
+    print(result_json)
