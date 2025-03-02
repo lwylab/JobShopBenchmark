@@ -1,14 +1,35 @@
+import re
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 
 from visualization.color_scheme import create_colormap
 
 
 def plot(JobShop):
+    """
+    绘制作业车间调度的甘特图。
+    Args:
+        JobShop: 作业车间调度环境对象。
+    Returns:
+        Matplotlib绘图对象。
+    """
     # 创建一个新的图形和坐标轴对象
     fig, ax = plt.subplots()
 
     # 从 color_scheme 模块中创建颜色映射，用于不同作业的颜色区分
     colormap = create_colormap()
+
+    # 使用正则表达式分割实例名称字符串
+    instance = re.split(r'[/.]', JobShop.instance_name)
+    # 检查是否有足够的部分，并处理边界条件
+    title = instance[3] if len(instance) > 3 else "N/A"
+
+    # 格式化标题，包含实例名称和最大完工时间（makespan）
+    initial_title = "Instance: " + title
+    makespan_value = str(JobShop.makespan) if hasattr(JobShop, 'makespan') and JobShop.makespan is not None else "N/A"
+    balanced_workload_value = str(JobShop.balanced_workload) if hasattr(JobShop, 'balanced_workload') and JobShop.balanced_workload is not None else "N/A"
+    formatted_title = f"{initial_title}, Makespan: {makespan_value}, Balanced_workload: {balanced_workload_value}"
 
     # 遍历 JobShop 中的每一台机器
     for machine in JobShop.machines:
@@ -81,17 +102,24 @@ def plot(JobShop):
     ax.set_yticks(range(JobShop.nr_of_machines))
     ax.set_yticklabels([f'M{machine_id+1}' for machine_id in range(JobShop.nr_of_machines)])
 
-    # 设置 x 轴标签为 "Time"
-    ax.set_xlabel('Time')
+    # 设置 x 轴标签为 "时间"
+    ax.set_xlabel('时间')
 
-    # 设置 y 轴标签为 "Machine"
-    ax.set_ylabel('Machine')
+    # 设置 y 轴标签为 "机器"
+    ax.set_ylabel('机器')
 
-    # 设置图表标题为 "Gantt Chart"
-    ax.set_title('Gantt Chart')
+    # 设置图表标题
+    ax.set_title(formatted_title)
 
     # 添加网格线
     ax.grid(True)
+
+    # 自动保存图表
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{title}_{current_time}.svg"
+    plt.savefig(filename)
+    plt.close()
+    print(f"甘特图已保存为 {filename}")
 
     # 返回绘制好的图表对象
     return plt
