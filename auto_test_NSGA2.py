@@ -6,10 +6,10 @@ import time
 from datetime import datetime
 from typing import Dict, List, Tuple
 
+from MO_VISUAL import gantt_chart
 from solution_methods.MO.run_NSGA2 import run_NSGA2
 from solution_methods.MO.src.initialization import initialize_run
 from solution_methods.helper_functions import load_job_shop_env, load_parameters
-from visualization import gantt_chart
 
 
 def ensure_directory_exists(filepath: str) -> None:

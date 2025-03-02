@@ -99,9 +99,6 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
     plt.title('Pareto Front')
     plt.legend()
 
-    # 设置图像为 1:1 的比例
-    plt.axis('equal')
-
     # 获取当前日期和时间，并格式化为文件名
     current_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f'pareto_front_{current_time}.svg'
