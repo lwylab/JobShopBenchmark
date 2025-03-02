@@ -15,20 +15,11 @@ def set_global_font(font_size=20):
     Args:
         font_size: 字体大小，默认为20
     """
-    # 检查宋体是否可用
-    chinese_font = 'SimSun'
+    # 设置英文字体为Times New Roman
     english_font = 'Times New Roman'
     
     # 获取系统中所有可用字体
     available_fonts = [f.name for f in fm.fontManager.ttflist]
-    
-    # 如果宋体不可用，尝试使用其他中文字体
-    if chinese_font not in available_fonts:
-        chinese_alternatives = ['Microsoft YaHei', 'SimHei', 'KaiTi', 'FangSong', 'STSong']
-        for font in chinese_alternatives:
-            if font in available_fonts:
-                chinese_font = font
-                break
     
     # 如果Times New Roman不可用，尝试使用其他英文字体
     if english_font not in available_fonts:
@@ -38,10 +29,9 @@ def set_global_font(font_size=20):
                 english_font = font
                 break
     
-    # 创建字体属性对象，用于中文标签
-    plt.rcParams['font.sans-serif'] = [chinese_font, 'DejaVu Sans', 'Arial']
+    # 设置所有字体为Times New Roman
+    plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.serif'] = [english_font, 'DejaVu Serif']
-    plt.rcParams['font.family'] = 'sans-serif'  # 默认使用sans-serif字体族，确保中文正常显示
     
     # 解决负号显示问题
     plt.rcParams['axes.unicode_minus'] = False
@@ -54,8 +44,8 @@ def set_global_font(font_size=20):
     plt.rcParams['legend.fontsize'] = font_size
     plt.rcParams['axes.titlesize'] = font_size
     
-    # 返回字体信息，用于特定元素的字体设置
-    return {'chinese': chinese_font, 'english': english_font}
+    # 返回字体信息
+    return {'english': english_font}
 
 
 def plot(JobShop, font_size=20, save_dir=None):
@@ -85,8 +75,6 @@ def plot(JobShop, font_size=20, save_dir=None):
     # 格式化标题，包含实例名称和最大完工时间（makespan）
     initial_title = "Instance: " + title
     makespan_value = str(JobShop.makespan) if hasattr(JobShop, 'makespan') and JobShop.makespan is not None else "N/A"
-    # balanced_workload_value = str(JobShop.balanced_workload) if hasattr(JobShop, 'balanced_workload') and JobShop.balanced_workload is not None else "N/A"
-    # formatted_title = f"{initial_title}, Makespan: {makespan_value}, Balanced_workload: {balanced_workload_value}"
     formatted_title = f"{initial_title}, Makespan: {makespan_value}"
 
 
@@ -151,7 +139,8 @@ def plot(JobShop, font_size=20, save_dir=None):
                 operation_label,  # 标签文本
                 ha='center',  # 水平对齐方式
                 va='center',  # 垂直对齐方式
-                fontsize=font_size * 0.8  # 操作标签字体大小设为主字体的80%
+                fontsize=font_size * 0.8,  # 操作标签字体大小设为主字体的80%
+                family='serif'  # 确保使用Times New Roman
             )
 
     # 设置图形的尺寸
@@ -161,14 +150,12 @@ def plot(JobShop, font_size=20, save_dir=None):
     ax.set_yticks(range(JobShop.nr_of_machines))
     ax.set_yticklabels([f'M{machine_id+1}' for machine_id in range(JobShop.nr_of_machines)])
 
-    # 设置 x 轴标签为 "时间"，明确指定中文字体
-    ax.set_xlabel('时间', fontproperties=fonts['chinese'])
+    # 设置坐标轴标签，使用Times New Roman
+    ax.set_xlabel('Time', family='serif')
+    ax.set_ylabel('Machine', family='serif')
 
-    # 设置 y 轴标签为 "机器"，明确指定中文字体
-    ax.set_ylabel('机器', fontproperties=fonts['chinese'])
-
-    # 设置图表标题，明确指定中文字体
-    ax.set_title(formatted_title, fontproperties=fonts['chinese'])
+    # 设置图表标题，使用Times New Roman
+    ax.set_title(formatted_title, family='serif')
 
     # 添加网格线
     ax.grid(True)
