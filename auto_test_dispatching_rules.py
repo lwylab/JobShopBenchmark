@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import re
 import time
@@ -17,7 +18,7 @@ def ensure_directory_exists(filepath: str) -> None:
         os.makedirs(directory)
 
 
-def run_single_instance(instance_path: str, parameters: Dict) -> Tuple[str, float, float]:
+def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -> Tuple[str, float, float, List]:
     """运行单个实例的调度规则算法"""
     try:
         jobShopEnv = load_job_shop_env(instance_path)
@@ -29,13 +30,20 @@ def run_single_instance(instance_path: str, parameters: Dict) -> Tuple[str, floa
         instance = re.split(r'[/.]', jobShopEnv.instance_name)
         title = instance[3] if len(instance) > 3 else "N/A"
 
-        # 绘制甘特图
-        gantt_chart.plot(jobShopEnv)
+        # 绘制甘特图并保存到结果目录
+        gantt_chart.plot(jobShopEnv, save_dir=result_dir)
 
-        return title, makespan, computation_time
+        # 收集操作调度信息
+        result = []
+        for op in jobShopEnv.operations:
+            row = op.scheduling_information  # 这是一个dict
+            row.update({'job_id': op.job_id, 'operation_id': op.operation_id})
+            result.append(row)
+
+        return title, makespan, computation_time, result
     except Exception as e:
         print(f"处理实例 {instance_path} 时发生错误: {str(e)}")
-        return instance_path, -1, -1
+        return instance_path, -1, -1, []
 
 
 def save_results_to_csv(results: List[Dict], filename: str) -> None:
@@ -53,6 +61,18 @@ def save_results_to_csv(results: List[Dict], filename: str) -> None:
         raise  # 添加异常重抛，以便更好地追踪错误
 
 
+def save_scheduling_info(scheduling_info: List, instance_name: str, result_dir: str) -> None:
+    """保存调度信息到JSON文件"""
+    try:
+        filename = os.path.join(result_dir, f"{instance_name}_scheduling_info.json")
+        ensure_directory_exists(filename)
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(scheduling_info, f, ensure_ascii=False, indent=4)
+        print(f"调度信息已保存至: {filename}")
+    except Exception as e:
+        print(f"保存调度信息时发生错误: {str(e)}")
+
+
 def main():
     try:
         # 加载参数配置
@@ -63,14 +83,16 @@ def main():
         # 创建实验结果列表和CSV文件名
         results = []
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-        csv_filename = os.path.join("results", f"Dispatching_Rules_experiment_{current_time}.csv")
+        result_dir = os.path.join("results", f"Dispatching_Rules_experiment_{current_time}")
+        ensure_directory_exists(os.path.join(result_dir, "placeholder"))  # 确保目录存在
+        csv_filename = os.path.join(result_dir, "Dispatching_Rules_results.csv")
 
         # 循环处理MFJS1到MFJS10
         for i in range(1, 11):
             problem_instance = f"/fjsp/fattahi/MFJS{i}.fjs"
             print(f"\n{'=' * 20}\n正在处理实例 MFJS{i}\n{'=' * 20}")
 
-            title, makespan, computation_time = run_single_instance(problem_instance, parameters)
+            title, makespan, computation_time, scheduling_info = run_single_instance(problem_instance, parameters, result_dir)
 
             results.append({
                 'Instance': title,
@@ -82,13 +104,17 @@ def main():
             print(f"最大完工时间: {makespan}")
             print(f"计算耗时: {computation_time:.2f}秒")
 
+            # 保存调度信息
+            if scheduling_info:
+                save_scheduling_info(scheduling_info, title, result_dir)
+
         # 可选：测试brandimarte实例
         # brandimarte_instances = [f"/fjsp/brandimarte/Mk{i}.fjs" for i in range(1, 11)]
         # for instance_path in brandimarte_instances:
         #     instance_name = instance_path.split('/')[-1].split('.')[0]
         #     print(f"\n{'=' * 20}\n正在处理实例 {instance_name}\n{'=' * 20}")
         #
-        #     title, makespan, computation_time = run_single_instance(instance_path, parameters)
+        #     title, makespan, computation_time, scheduling_info = run_single_instance(instance_path, parameters, result_dir)
         #
         #     results.append({
         #         'Instance': title,
@@ -99,6 +125,10 @@ def main():
         #     print(f"实例: {title}")
         #     print(f"最大完工时间: {makespan}")
         #     print(f"计算耗时: {computation_time:.2f}秒")
+        #     
+        #     # 保存调度信息
+        #     if scheduling_info:
+        #         save_scheduling_info(scheduling_info, title, result_dir)
 
         # 保存实验结果
         save_results_to_csv(results, csv_filename)
