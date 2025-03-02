@@ -1,0 +1,233 @@
+[
+    {
+        "machine_id": 1,
+        "start_time": 216,
+        "end_time": 439,
+        "processing_time": 223,
+        "start_setup": 216,
+        "end_setup": 216,
+        "setup_time": 0,
+        "job_id": 0,
+        "operation_id": 0
+    },
+    {
+        "machine_id": 6,
+        "start_time": 439,
+        "end_time": 562,
+        "processing_time": 123,
+        "start_setup": 439,
+        "end_setup": 439,
+        "setup_time": 0,
+        "job_id": 0,
+        "operation_id": 1
+    },
+    {
+        "machine_id": 3,
+        "start_time": 562,
+        "end_time": 712,
+        "processing_time": 150,
+        "start_setup": 562,
+        "end_setup": 562,
+        "setup_time": 0,
+        "job_id": 0,
+        "operation_id": 2
+    },
+    {
+        "machine_id": 2,
+        "start_time": 0,
+        "end_time": 150,
+        "processing_time": 150,
+        "start_setup": 0,
+        "end_setup": 0,
+        "setup_time": 0,
+        "job_id": 1,
+        "operation_id": 3
+    },
+    {
+        "machine_id": 1,
+        "start_time": 150,
+        "end_time": 216,
+        "processing_time": 66,
+        "start_setup": 150,
+        "end_setup": 150,
+        "setup_time": 0,
+        "job_id": 1,
+        "operation_id": 4
+    },
+    {
+        "machine_id": 5,
+        "start_time": 216,
+        "end_time": 311,
+        "processing_time": 95,
+        "start_setup": 216,
+        "end_setup": 216,
+        "setup_time": 0,
+        "job_id": 1,
+        "operation_id": 5
+    },
+    {
+        "machine_id": 0,
+        "start_time": 0,
+        "end_time": 87,
+        "processing_time": 87,
+        "start_setup": 0,
+        "end_setup": 0,
+        "setup_time": 0,
+        "job_id": 2,
+        "operation_id": 6
+    },
+    {
+        "machine_id": 3,
+        "start_time": 87,
+        "end_time": 192,
+        "processing_time": 105,
+        "start_setup": 87,
+        "end_setup": 87,
+        "setup_time": 0,
+        "job_id": 2,
+        "operation_id": 7
+    },
+    {
+        "machine_id": 3,
+        "start_time": 192,
+        "end_time": 382,
+        "processing_time": 190,
+        "start_setup": 192,
+        "end_setup": 192,
+        "setup_time": 0,
+        "job_id": 2,
+        "operation_id": 8
+    },
+    {
+        "machine_id": 0,
+        "start_time": 87,
+        "end_time": 174,
+        "processing_time": 87,
+        "start_setup": 87,
+        "end_setup": 87,
+        "setup_time": 0,
+        "job_id": 3,
+        "operation_id": 9
+    },
+    {
+        "machine_id": 4,
+        "start_time": 174,
+        "end_time": 347,
+        "processing_time": 173,
+        "start_setup": 174,
+        "end_setup": 174,
+        "setup_time": 0,
+        "job_id": 3,
+        "operation_id": 10
+    },
+    {
+        "machine_id": 5,
+        "start_time": 479,
+        "end_time": 615,
+        "processing_time": 136,
+        "start_setup": 479,
+        "end_setup": 479,
+        "setup_time": 0,
+        "job_id": 3,
+        "operation_id": 11
+    },
+    {
+        "machine_id": 0,
+        "start_time": 174,
+        "end_time": 302,
+        "processing_time": 128,
+        "start_setup": 174,
+        "end_setup": 174,
+        "setup_time": 0,
+        "job_id": 4,
+        "operation_id": 12
+    },
+    {
+        "machine_id": 4,
+        "start_time": 347,
+        "end_time": 394,
+        "processing_time": 47,
+        "start_setup": 347,
+        "end_setup": 347,
+        "setup_time": 0,
+        "job_id": 4,
+        "operation_id": 13
+    },
+    {
+        "machine_id": 5,
+        "start_time": 394,
+        "end_time": 479,
+        "processing_time": 85,
+        "start_setup": 394,
+        "end_setup": 394,
+        "setup_time": 0,
+        "job_id": 4,
+        "operation_id": 14
+    },
+    {
+        "machine_id": 1,
+        "start_time": 0,
+        "end_time": 145,
+        "processing_time": 145,
+        "start_setup": 0,
+        "end_setup": 0,
+        "setup_time": 0,
+        "job_id": 5,
+        "operation_id": 15
+    },
+    {
+        "machine_id": 2,
+        "start_time": 150,
+        "end_time": 273,
+        "processing_time": 123,
+        "start_setup": 150,
+        "end_setup": 150,
+        "setup_time": 0,
+        "job_id": 5,
+        "operation_id": 16
+    },
+    {
+        "machine_id": 4,
+        "start_time": 394,
+        "end_time": 514,
+        "processing_time": 120,
+        "start_setup": 394,
+        "end_setup": 394,
+        "setup_time": 0,
+        "job_id": 5,
+        "operation_id": 17
+    },
+    {
+        "machine_id": 0,
+        "start_time": 302,
+        "end_time": 459,
+        "processing_time": 157,
+        "start_setup": 302,
+        "end_setup": 302,
+        "setup_time": 0,
+        "job_id": 6,
+        "operation_id": 18
+    },
+    {
+        "machine_id": 2,
+        "start_time": 459,
+        "end_time": 583,
+        "processing_time": 124,
+        "start_setup": 459,
+        "end_setup": 459,
+        "setup_time": 0,
+        "job_id": 6,
+        "operation_id": 19
+    },
+    {
+        "machine_id": 4,
+        "start_time": 583,
+        "end_time": 728,
+        "processing_time": 145,
+        "start_setup": 583,
+        "end_setup": 583,
+        "setup_time": 0,
+        "job_id": 6,
+        "operation_id": 20
+    }
+]
