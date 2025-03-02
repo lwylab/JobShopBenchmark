@@ -38,7 +38,7 @@ def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -
         computation_time = time.time() - start_time
 
         # 提取实例名称
-        instance = re.split(r'[/\.]', jobShopEnv.instance_name)
+        instance = re.split(r'[/.]', jobShopEnv.instance_name)
         title = instance[3] if len(instance) > 3 else "N/A"
 
         # 绘制甘特图并保存到结果目录

@@ -85,8 +85,10 @@ def plot(JobShop, font_size=20, save_dir=None):
     # 格式化标题，包含实例名称和最大完工时间（makespan）
     initial_title = "Instance: " + title
     makespan_value = str(JobShop.makespan) if hasattr(JobShop, 'makespan') and JobShop.makespan is not None else "N/A"
-    balanced_workload_value = str(JobShop.balanced_workload) if hasattr(JobShop, 'balanced_workload') and JobShop.balanced_workload is not None else "N/A"
-    formatted_title = f"{initial_title}, Makespan: {makespan_value}, Balanced_workload: {balanced_workload_value}"
+    # balanced_workload_value = str(JobShop.balanced_workload) if hasattr(JobShop, 'balanced_workload') and JobShop.balanced_workload is not None else "N/A"
+    # formatted_title = f"{initial_title}, Makespan: {makespan_value}, Balanced_workload: {balanced_workload_value}"
+    formatted_title = f"{initial_title}, Makespan: {makespan_value}"
+
 
     # 遍历 JobShop 中的每一台机器
     for machine in JobShop.machines:
@@ -149,7 +151,7 @@ def plot(JobShop, font_size=20, save_dir=None):
                 operation_label,  # 标签文本
                 ha='center',  # 水平对齐方式
                 va='center',  # 垂直对齐方式
-                fontsize=font_size * 0.4  # 操作标签字体大小设为主字体的40%
+                fontsize=font_size * 0.8  # 操作标签字体大小设为主字体的80%
             )
 
     # 设置图形的尺寸
