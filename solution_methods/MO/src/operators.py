@@ -92,24 +92,23 @@ def evaluate_individual(individual, jobShopEnv: JobShop, reset=True):
         jobShopEnv.update_operations_available_for_scheduling()
 
     makespan = jobShopEnv.makespan
+    balanced_workload = jobShopEnv.balanced_workload  # 计算均衡负载
+
 
     if reset:
         jobShopEnv.reset()
-    return makespan, jobShopEnv
+    return (makespan, balanced_workload), jobShopEnv
 
 
 def evaluate_population(toolbox, population):
-    # start_time = time.time()
-
-    # sequential evaluation of population
-    # population = [[ind[0], ind[1]] for ind in population]
-    # fitnesses = [toolbox.evaluate_individual(ind) for ind in population]
-    # fitnesses = [(fit[0],) for fit in fitnesses]
-
-    # parallel evaluation of population
+    # 将种群转换为适合评估的格式
     population = [[ind[0], ind[1]] for ind in population]
+    fitness = []  # 多目标优化，有多个适应度值
+    # 并行评估种群中所有个体的适应度
     fitnesses = toolbox.map(toolbox.evaluate_individual, population)
-    fitnesses = [(fit[0],) for fit in fitnesses]
+
+    # 因为evaluate_individual返回的是一个元组
+    fitnesses = [(fit[0]) for fit in fitnesses]  # 提取适应度值
 
     return fitnesses
 
