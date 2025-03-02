@@ -19,7 +19,7 @@ def ensure_directory_exists(filepath: str) -> None:
         os.makedirs(directory)
 
 
-def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -> Tuple[str, float, float, List]:
+def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -> Tuple[str, float, float, List, int, int, int]:
     """运行单个实例的GA算法"""
     try:
         # 加载作业车间环境
@@ -58,8 +58,7 @@ def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -
         return title, makespan, computation_time, result, jobs, machines, operations
     except Exception as e:
         print(f"处理实例 {instance_path} 时发生错误: {str(e)}")
-        return instance_path, -1, -1, []
-
+        return instance_path, -1, -1, [], -1, -1, -1  # 修复：返回7个值
 
 def save_results_to_csv(results: List[Dict], filename: str) -> None:
     """保存结果到CSV文件"""
@@ -107,17 +106,22 @@ def main():
             problem_instance = f"/fjsp/fattahi/MFJS{i}.fjs"
             print(f"\n{'=' * 20}\n正在处理实例 MFJS{i}\n{'=' * 20}")
 
-            title, makespan, computation_time, scheduling_info = run_single_instance(problem_instance, parameters, result_dir)
-
+            # 修复：正确解包所有返回值
+            title, makespan, computation_time, scheduling_info, jobs, machines, operations = run_single_instance(problem_instance, parameters, result_dir)
             results.append({
                 'Instance': title,
                 'Makespan': makespan,
-                'Computation Time': computation_time
+                'Computation Time': computation_time,
+                'Jobs': jobs,
+                'Machines': machines,
+                'Operations': operations
             })
-
             print(f"实例: {title}")
             print(f"最大完工时间: {makespan}")
             print(f"计算耗时: {computation_time:.2f}秒")
+            print(f"作业数: {jobs}")
+            print(f"机器数: {machines}")
+            print(f"操作数: {operations}")
 
             # 保存调度信息
             if scheduling_info:
@@ -129,17 +133,24 @@ def main():
         #     instance_name = instance_path.split('/')[-1].split('.')[0]
         #     print(f"\n{'=' * 20}\n正在处理实例 {instance_name}\n{'=' * 20}")
         #
-        #     title, makespan, computation_time, scheduling_info = run_single_instance(instance_path, parameters, result_dir)
+        #     # 修复：正确解包所有返回值
+        #     title, makespan, computation_time, scheduling_info, jobs, machines, operations = run_single_instance(instance_path, parameters, result_dir)
         #
         #     results.append({
         #         'Instance': title,
         #         'Makespan': makespan,
-        #         'Computation Time': computation_time
+        #         'Computation Time': computation_time,
+        #         'Jobs': jobs,
+        #         'Machines': machines,
+        #         'Operations': operations
         #     })
         #
         #     print(f"实例: {title}")
         #     print(f"最大完工时间: {makespan}")
         #     print(f"计算耗时: {computation_time:.2f}秒")
+        #     print(f"作业数: {jobs}")
+        #     print(f"机器数: {machines}")
+        #     print(f"操作数: {operations}")
         #     
         #     # 保存调度信息
         #     if scheduling_info:
