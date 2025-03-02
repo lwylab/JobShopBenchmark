@@ -33,7 +33,7 @@ if __name__ == '__main__':
     makespan, jobShopEnv = run_GA(jobShopEnv, population, toolbox, stats, hof, **parameters)
 
     # 使用正则表达式分割字符串
-    instance = re.split(r'[/\.]', jobShopEnv.instance_name)
+    instance = re.split(r'[/.]', jobShopEnv.instance_name)
 
     # 检查是否有足够的部分，并处理边界条件
     title = instance[3] if len(instance) > 3 else "N/A"
