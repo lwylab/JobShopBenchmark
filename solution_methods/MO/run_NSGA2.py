@@ -33,7 +33,15 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
         jobShopEnv: 作业车间环境对象，用于获取实例名称
     """
     plt.figure(figsize=(10, 6))  # 设置图形大小
-    plt.style.use('seaborn-darkgrid')  # 使用专业的绘图风格
+    
+    # 使用兼容的样式设置方法
+    try:
+        # 尝试导入seaborn并设置样式
+        import seaborn as sns
+        sns.set_style("darkgrid")
+    except ImportError:
+        # 如果seaborn不可用，使用matplotlib内置样式
+        plt.style.use('ggplot')
 
     # 提取 Pareto 前沿的数据点
     pareto_front_values = [ind.fitness.values for ind in pareto_front]
