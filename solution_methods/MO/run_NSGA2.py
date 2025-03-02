@@ -162,13 +162,34 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
         # 更新 Pareto 最优解集和统计信息
         pareto_front.update(population)
         record_stats(gen, population, logbook, stats, kwargs['output']['logbook'], df_list, logging)
-
-    # 从 Pareto 最优解集中选择一个解（选择两个目标调和平均数最小的解）
-    best_solution = min(pareto_front, key=lambda ind: 2 / ((1/ind.fitness.values[0]) + (1/ind.fitness.values[1])))
+    # 从 Pareto 最优解集中选择一个解
+    # 1. 去除重复的解
+    unique_solutions = []
+    unique_fitness_values = []
+    for ind in pareto_front:
+        if ind.fitness.values not in unique_fitness_values:
+            unique_fitness_values.append(ind.fitness.values)
+            unique_solutions.append(ind)
+    
+    # 2. 找到两个目标的最大值，用于归一化
+    max_makespan = max(ind.fitness.values[0] for ind in unique_solutions)
+    max_balanced_workload = max(ind.fitness.values[1] for ind in unique_solutions)
+    
+    # 3. 设置权重（默认各0.5）
+    makespan_weight = 0.5
+    balanced_workload_weight = 0.5
+    
+    # 4. 根据归一化后的加权和选择最优解
+    best_solution = min(
+        unique_solutions, 
+        key=lambda ind: (
+            makespan_weight * (ind.fitness.values[0] / max_makespan) + 
+            balanced_workload_weight * (ind.fitness.values[1] / max_balanced_workload)
+        )
+    )
 
     # 评估最佳个体的适应度值，并返回最终的作业车间环境
     fitnesses, jobShopEnv = evaluate_individual(best_solution, jobShopEnv, reset=False)
-
     # 绘制Pareto前沿，如果提供了save_dir参数则使用它
     save_dir = kwargs.get('save_dir', None)
     plot_pareto_front(pareto_front, fitnesses, jobShopEnv, save_dir)
