@@ -2,6 +2,7 @@ import argparse  # 用于解析命令行参数
 import datetime
 import logging  # 用于日志记录
 import os  # 用于处理文件和目录路径
+import re
 
 from deap import tools  # 确保已导入 DEAP 库中的工具模块
 from matplotlib import pyplot as plt
@@ -90,21 +91,54 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
     fitnesses, jobShopEnv = evaluate_individual(best_solution, jobShopEnv, reset=False)
 
     # 绘制 Pareto 最优解集
+    plt.figure(figsize=(10, 6))  # 设置图形大小
+    plt.style.use('seaborn-darkgrid')  # 使用专业的绘图风格
+
+    # 提取 Pareto 前沿的数据点
     pareto_front_values = [ind.fitness.values for ind in pareto_front]
     makespans, balanced_workloads = zip(*pareto_front_values)
-    plt.plot(makespans, balanced_workloads, color='red', marker='o',
-             label='Pareto Front')  # 使用 plot 替换 scatter，并添加 marker
-    plt.xlabel('Makespan')
-    plt.ylabel('Balanced Workload')
-    plt.title('Pareto Front')
-    plt.legend()
+
+    # 绘制 Pareto 前沿
+    plt.scatter(makespans, balanced_workloads, 
+               c='red', marker='o', s=100, alpha=0.6, 
+               label='Pareto Front Solutions')
+    
+    # 连接 Pareto 前沿点
+    sorted_points = sorted(zip(makespans, balanced_workloads))
+    sorted_makespans, sorted_workloads = zip(*sorted_points)
+    plt.plot(sorted_makespans, sorted_workloads, 
+            'r--', linewidth=1.5, alpha=0.5)
+
+    # 标注最优解
+    best_makespan = fitnesses[0]
+    best_workload = fitnesses[1]
+    plt.scatter(best_makespan, best_workload, 
+               c='blue', marker='*', s=200, 
+               label='Selected Solution')
+
+    # 设置坐标轴和标签
+    plt.xlabel('Makespan', fontsize=12, fontfamily='Times New Roman')
+    plt.ylabel('Balanced Workload', fontsize=12, fontfamily='Times New Roman')
+    plt.title('Pareto Front', fontsize=14, fontfamily='Times New Roman')
+
+    # 添加网格
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # 优化图例
+    plt.legend(frameon=True, framealpha=0.9, fontsize=10)
+
+    # 调整布局
+    plt.tight_layout()
 
     # 获取当前日期和时间，并格式化为文件名
     current_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f'pareto_front_{current_time}.svg'
+    
+    # 从实例名称中提取标识符
+    instance_id = re.split(r'[/.]', jobShopEnv.instance_name)[3]
+    filename = f'pareto_front_{instance_id}_{current_time}.svg'
 
     # 设置保存路径
-    save_path = '/pareto_front'
+    save_path = os.path.join('results', 'pareto_fronts')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
@@ -112,8 +146,8 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
     full_filename = os.path.join(save_path, filename)
 
     # 保存为 SVG 文件
-    plt.savefig(full_filename)
-    plt.show()
+    plt.savefig(full_filename, dpi=300, bbox_inches='tight')
+    plt.close()  # 关闭图形，释放内存
 
     # 打印 Pareto 最优解集
     logging.info("Pareto 最优解集:")
