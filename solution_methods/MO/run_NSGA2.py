@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
 PARAM_FILE = "../../configs/GA.toml"
 
 
-def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
+def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv, save_dir=None):
     """
     绘制Pareto前沿并保存图像
     
@@ -31,6 +31,7 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
         pareto_front: Pareto最优解集
         best_solution_fitness: 选中的最优解适应度值
         jobShopEnv: 作业车间环境对象，用于获取实例名称
+        save_dir: 保存目录，如果提供则使用此目录，否则使用默认目录
     """
     plt.figure(figsize=(10, 6))  # 设置图形大小
     
@@ -55,12 +56,7 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
     plt.plot(sorted_makespans, sorted_workloads, 
             'r--', linewidth=1.5, alpha=0.5)
     
-    # 标注最优解
-    best_makespan = best_solution_fitness[0]
-    best_workload = best_solution_fitness[1]
-    plt.scatter(best_makespan, best_workload, 
-               c='blue', marker='*', s=200, 
-               label='Selected Solution')
+    # 移除标注最优解的代码
     
     # 设置坐标轴和标签
     plt.xlabel('Makespan', fontsize=20)
@@ -87,7 +83,13 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
     filename = f'pareto_front_{instance_id}_{current_time}.svg'
     
     # 设置保存路径
-    save_path = os.path.join('results', 'pareto_fronts')
+    if save_dir:
+        # 使用提供的保存目录
+        save_path = save_dir
+    else:
+        # 使用默认保存路径
+        save_path = os.path.join('results', 'pareto_fronts')
+    
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     
@@ -167,8 +169,9 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
     # 评估最佳个体的适应度值，并返回最终的作业车间环境
     fitnesses, jobShopEnv = evaluate_individual(best_solution, jobShopEnv, reset=False)
 
-    # 绘制Pareto前沿
-    plot_pareto_front(pareto_front, fitnesses, jobShopEnv)
+    # 绘制Pareto前沿，如果提供了save_dir参数则使用它
+    save_dir = kwargs.get('save_dir', None)
+    plot_pareto_front(pareto_front, fitnesses, jobShopEnv, save_dir)
 
     # 打印 Pareto 最优解集
     logging.info("Pareto 最优解集:")

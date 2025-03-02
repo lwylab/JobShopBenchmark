@@ -31,6 +31,9 @@ def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -
         # 开始计时
         start_time = time.time()
 
+        # 添加结果目录到参数中
+        parameters['save_dir'] = result_dir
+
         # 运行NSGA2算法
         fitnesses, jobShopEnv = run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **parameters)
 
