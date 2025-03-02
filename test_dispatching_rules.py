@@ -6,17 +6,12 @@ from solution_methods.helper_functions import load_job_shop_env, load_parameters
 from visualization import gantt_chart
 
 if __name__ == '__main__':
-    # freeze_support() # 关闭之后，貌似也能正常工作
 
-    # 定义问题实例，也可以从配置文件中加载
-    # problem_instance = "/fjsp/fattahi/MFJS10.fjs"
     problem_instance = "/fjsp/brandimarte/Mk10.fjs"
 
     # 加载作业车间环境
     jobShopEnv = load_job_shop_env(problem_instance)
 
-    # 对初始作业车间环境绘制甘特图没有意义
-    # plot_gantt_chart(jobShopEnv)
 
     # 加载CP_SAT配置
     parameters = load_parameters("configs/dispatching_rules.toml")
