@@ -7,11 +7,11 @@ from deap import tools  # 确保已导入 DEAP 库中的工具模块
 from matplotlib import pyplot as plt
 
 # 导入自定义模块
-from solution_methods.GA.src.initialization import initialize_run  # 初始化遗传算法运行环境
-from solution_methods.GA.src.operators import (
+from solution_methods.MO.src.initialization import initialize_run  # 初始化遗传算法运行环境
+from solution_methods.MO.src.operators import (
     evaluate_individual, evaluate_population, repair_precedence_constraints, variation
 )  # 遗传算法操作函数
-from solution_methods.GA.utils import record_stats, output_dir_exp_name, results_saving  # 工具函数：记录统计信息、生成输出目录、保存结果
+from solution_methods.MO.utils import (record_stats, output_dir_exp_name, results_saving)  # 工具函数：记录统计信息、生成输出目录、保存结果
 from solution_methods.helper_functions import load_parameters, load_job_shop_env  # 辅助函数：加载参数和作业车间环境
 from visualization import precedence_chart, gantt_chart
 
@@ -96,7 +96,7 @@ def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
              label='Pareto Front')  # 使用 plot 替换 scatter，并添加 marker
     plt.xlabel('Makespan')
     plt.ylabel('Balanced Workload')
-    plt.title('Pareto Front Visualization')
+    plt.title('Pareto Front')
     plt.legend()
 
     # 设置图像为 1:1 的比例
