@@ -158,7 +158,7 @@ def plot(JobShop, font_size=20, save_dir=None):
     ax.set_title(formatted_title, family='serif')
 
     # 添加网格线
-    ax.grid(True)
+    # ax.grid(True)  # 注释掉或删除此行以去掉网格线
 
     # 自动保存图表
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
