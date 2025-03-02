@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     population, toolbox, stats, pareto_front = initialize_run(jobShopEnv, **parameters)
 
-    # 从此刻开始计时，，
+    # 从此刻开始计时
     start_time = time.time()
 
     fitnesses, jobShopEnv = run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **parameters)

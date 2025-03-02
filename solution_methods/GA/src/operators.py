@@ -4,7 +4,8 @@ import numpy as np
 
 from scheduling_environment.jobShop import JobShop
 from scheduling_environment.operation import Operation
-from solution_methods.GA.src.heuristics import global_load_balancing_scheduler, local_load_balancing_scheduler, random_scheduler
+from solution_methods.MO.src.heuristics import global_load_balancing_scheduler, local_load_balancing_scheduler, \
+    random_scheduler
 
 
 def select_next_operation_from_job(jobShopEnv: JobShop, job_id) -> Operation:
