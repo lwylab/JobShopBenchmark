@@ -34,19 +34,16 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
     """
     plt.figure(figsize=(10, 6))  # 设置图形大小
     
-    # 使用兼容的样式设置方法
-    try:
-        # 尝试导入seaborn并设置样式
-        import seaborn as sns
-        sns.set_style("darkgrid")
-    except ImportError:
-        # 如果seaborn不可用，使用matplotlib内置样式
-        plt.style.use('ggplot')
-
+    # 使用默认风格
+    plt.style.use('default')
+    # 设置全局字体为 Times New Roman
+    plt.rcParams['font.family'] = 'Times New Roman'
+    plt.rcParams['font.size'] = 20
+    
     # 提取 Pareto 前沿的数据点
     pareto_front_values = [ind.fitness.values for ind in pareto_front]
     makespans, balanced_workloads = zip(*pareto_front_values)
-
+    
     # 绘制 Pareto 前沿
     plt.scatter(makespans, balanced_workloads, 
                c='red', marker='o', s=100, alpha=0.6, 
@@ -57,49 +54,51 @@ def plot_pareto_front(pareto_front, best_solution_fitness, jobShopEnv):
     sorted_makespans, sorted_workloads = zip(*sorted_points)
     plt.plot(sorted_makespans, sorted_workloads, 
             'r--', linewidth=1.5, alpha=0.5)
-
+    
     # 标注最优解
     best_makespan = best_solution_fitness[0]
     best_workload = best_solution_fitness[1]
     plt.scatter(best_makespan, best_workload, 
                c='blue', marker='*', s=200, 
                label='Selected Solution')
-
+    
     # 设置坐标轴和标签
-    plt.xlabel('Makespan', fontsize=12, fontfamily='Times New Roman')
-    plt.ylabel('Balanced Workload', fontsize=12, fontfamily='Times New Roman')
-    plt.title('Pareto Front', fontsize=14, fontfamily='Times New Roman')
-
+    plt.xlabel('Makespan', fontsize=20)
+    plt.ylabel('Balanced Workload', fontsize=20)
+    plt.title('Pareto Front', fontsize=20)
+    
     # 添加网格
     plt.grid(True, linestyle='--', alpha=0.7)
-
+    
     # 优化图例
-    plt.legend(frameon=True, framealpha=0.9, fontsize=10)
-
+    plt.legend(frameon=True, framealpha=0.9, fontsize=20)
+    # 调整刻度标签字体大小
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    
     # 调整布局
     plt.tight_layout()
-
+    
     # 获取当前日期和时间，并格式化为文件名
     current_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     
     # 从实例名称中提取标识符
     instance_id = re.split(r'[/.]', jobShopEnv.instance_name)[3]
     filename = f'pareto_front_{instance_id}_{current_time}.svg'
-
+    
     # 设置保存路径
     save_path = os.path.join('results', 'pareto_fronts')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-
+    
     # 构建完整的文件路径
     full_filename = os.path.join(save_path, filename)
-
+    
     # 保存为 SVG 文件
     plt.savefig(full_filename, dpi=300, bbox_inches='tight')
     plt.close()  # 关闭图形，释放内存
     
     logging.info(f"Pareto前沿图已保存至: {full_filename}")
-
 
 def run_NSGA2(jobShopEnv, population, toolbox, stats, pareto_front, **kwargs):
     """
