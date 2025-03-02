@@ -6,14 +6,46 @@ import matplotlib.pyplot as plt
 from visualization.color_scheme import create_colormap
 
 
-def plot(JobShop):
+# 全局字体设置
+def set_global_font(font_size=20):
+    """
+    设置全局字体样式和大小
+    Args:
+        font_size: 字体大小，默认为20
+    """
+    # 设置中文字体为宋体
+    plt.rcParams['font.sans-serif'] = ['SimSun', 'DejaVu Sans', 'Arial']
+    # 设置英文字体为Times New Roman
+    plt.rcParams['font.serif'] = ['Times New Roman', 'DejaVu Serif']
+    # 优先使用serif字体
+    plt.rcParams['font.family'] = 'serif'
+    # 解决负号显示问题
+    plt.rcParams['axes.unicode_minus'] = False
+    # 设置全局字体大小
+    plt.rcParams['font.size'] = font_size
+    # 设置坐标轴标签字体大小
+    plt.rcParams['axes.labelsize'] = font_size
+    # 设置坐标轴刻度字体大小
+    plt.rcParams['xtick.labelsize'] = font_size
+    plt.rcParams['ytick.labelsize'] = font_size
+    # 设置图例字体大小
+    plt.rcParams['legend.fontsize'] = font_size
+    # 设置标题字体大小
+    plt.rcParams['axes.titlesize'] = font_size
+
+
+def plot(JobShop, font_size=20):
     """
     绘制作业车间调度的甘特图。
     Args:
         JobShop: 作业车间调度环境对象。
+        font_size: 字体大小，默认为20。
     Returns:
         Matplotlib绘图对象。
     """
+    # 设置全局字体
+    set_global_font(font_size)
+    
     # 创建一个新的图形和坐标轴对象
     fig, ax = plt.subplots()
 
@@ -92,7 +124,7 @@ def plot(JobShop):
                 operation_label,  # 标签文本
                 ha='center',  # 水平对齐方式
                 va='center',  # 垂直对齐方式
-                fontsize=8  # 字体大小
+                fontsize=font_size * 0.4  # 操作标签字体大小设为主字体的40%
             )
 
     # 设置图形的尺寸
@@ -117,7 +149,7 @@ def plot(JobShop):
     # 自动保存图表
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{title}_{current_time}.svg"
-    plt.savefig(filename)
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"甘特图已保存为 {filename}")
 
