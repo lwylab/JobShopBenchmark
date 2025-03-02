@@ -1,6 +1,8 @@
+import os
 import re
 from datetime import datetime
 
+import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
 
 from visualization.color_scheme import create_colormap
@@ -13,38 +15,61 @@ def set_global_font(font_size=20):
     Args:
         font_size: 字体大小，默认为20
     """
-    # 设置中文字体为宋体
-    plt.rcParams['font.sans-serif'] = ['SimSun', 'DejaVu Sans', 'Arial']
-    # 设置英文字体为Times New Roman
-    plt.rcParams['font.serif'] = ['Times New Roman', 'DejaVu Serif']
-    # 优先使用serif字体
-    plt.rcParams['font.family'] = 'serif'
+    # 检查宋体是否可用
+    chinese_font = 'SimSun'
+    english_font = 'Times New Roman'
+    
+    # 获取系统中所有可用字体
+    available_fonts = [f.name for f in fm.fontManager.ttflist]
+    
+    # 如果宋体不可用，尝试使用其他中文字体
+    if chinese_font not in available_fonts:
+        chinese_alternatives = ['Microsoft YaHei', 'SimHei', 'KaiTi', 'FangSong', 'STSong']
+        for font in chinese_alternatives:
+            if font in available_fonts:
+                chinese_font = font
+                break
+    
+    # 如果Times New Roman不可用，尝试使用其他英文字体
+    if english_font not in available_fonts:
+        english_alternatives = ['Arial', 'Helvetica', 'DejaVu Serif', 'DejaVu Sans']
+        for font in english_alternatives:
+            if font in available_fonts:
+                english_font = font
+                break
+    
+    # 创建字体属性对象，用于中文标签
+    plt.rcParams['font.sans-serif'] = [chinese_font, 'DejaVu Sans', 'Arial']
+    plt.rcParams['font.serif'] = [english_font, 'DejaVu Serif']
+    plt.rcParams['font.family'] = 'sans-serif'  # 默认使用sans-serif字体族，确保中文正常显示
+    
     # 解决负号显示问题
     plt.rcParams['axes.unicode_minus'] = False
+    
     # 设置全局字体大小
     plt.rcParams['font.size'] = font_size
-    # 设置坐标轴标签字体大小
     plt.rcParams['axes.labelsize'] = font_size
-    # 设置坐标轴刻度字体大小
     plt.rcParams['xtick.labelsize'] = font_size
     plt.rcParams['ytick.labelsize'] = font_size
-    # 设置图例字体大小
     plt.rcParams['legend.fontsize'] = font_size
-    # 设置标题字体大小
     plt.rcParams['axes.titlesize'] = font_size
+    
+    # 返回字体信息，用于特定元素的字体设置
+    return {'chinese': chinese_font, 'english': english_font}
 
 
-def plot(JobShop, font_size=20):
+def plot(JobShop, font_size=20, save_dir=None):
     """
     绘制作业车间调度的甘特图。
     Args:
         JobShop: 作业车间调度环境对象。
         font_size: 字体大小，默认为20。
+        save_dir: 保存甘特图的目录路径，默认为None（保存在当前目录）。
     Returns:
         Matplotlib绘图对象。
     """
     # 设置全局字体
-    set_global_font(font_size)
+    fonts = set_global_font(font_size)
     
     # 创建一个新的图形和坐标轴对象
     fig, ax = plt.subplots()
@@ -134,21 +159,30 @@ def plot(JobShop, font_size=20):
     ax.set_yticks(range(JobShop.nr_of_machines))
     ax.set_yticklabels([f'M{machine_id+1}' for machine_id in range(JobShop.nr_of_machines)])
 
-    # 设置 x 轴标签为 "时间"
-    ax.set_xlabel('时间')
+    # 设置 x 轴标签为 "时间"，明确指定中文字体
+    ax.set_xlabel('时间', fontproperties=fonts['chinese'])
 
-    # 设置 y 轴标签为 "机器"
-    ax.set_ylabel('机器')
+    # 设置 y 轴标签为 "机器"，明确指定中文字体
+    ax.set_ylabel('机器', fontproperties=fonts['chinese'])
 
-    # 设置图表标题
-    ax.set_title(formatted_title)
+    # 设置图表标题，明确指定中文字体
+    ax.set_title(formatted_title, fontproperties=fonts['chinese'])
 
     # 添加网格线
     ax.grid(True)
 
     # 自动保存图表
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{title}_{current_time}.svg"
+    
+    # 如果提供了保存目录，则使用该目录
+    if save_dir:
+        # 确保目录存在
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        filename = os.path.join(save_dir, f"{title}_gantt_{current_time}.svg")
+    else:
+        filename = f"{title}_gantt_{current_time}.svg"
+    
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"甘特图已保存为 {filename}")
