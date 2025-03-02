@@ -51,7 +51,11 @@ def run_single_instance(instance_path: str, parameters: Dict, result_dir: str) -
             row.update({'job_id': op.job_id, 'operation_id': op.operation_id})
             result.append(row)
 
-        return title, makespan, computation_time, result
+        jobs= jobShopEnv.nr_of_jobs
+        machines= jobShopEnv.nr_of_machines
+        operations= jobShopEnv.nr_of_operations
+
+        return title, makespan, computation_time, result, jobs, machines, operations
     except Exception as e:
         print(f"处理实例 {instance_path} 时发生错误: {str(e)}")
         return instance_path, -1, -1, []
@@ -61,7 +65,7 @@ def save_results_to_csv(results: List[Dict], filename: str) -> None:
     """保存结果到CSV文件"""
     try:
         ensure_directory_exists(filename)
-        fieldnames = ['Instance', 'Makespan', 'Computation Time']
+        fieldnames = ['Instance', 'Makespan', 'Computation Time',"Jobs","Machines","Operations"]
         with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
